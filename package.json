@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/peterburgs/e-commerce-server#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "i": "^0.3.6",
+    "jsonwebtoken": "^8.5.1",
+    "npm": "^7.6.0"
   }
 }
