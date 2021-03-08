@@ -29,8 +29,8 @@ router.post("/", async (req, res) => {
     if (savedProduct) {
       console.log("*** New product is saved successfully ");
       res.status(201).json({
-        product: savedProduct,
         message: "New product is saved successfully",
+        product: savedProduct,
       });
     } else {
       res.status(500).json({
@@ -45,11 +45,12 @@ router.post("/", async (req, res) => {
 //GET: Get all products
 router.get("/", async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find({ hidden: false });
     if (products) {
       res.status(201).json({
-        products,
         message: "Get all products",
+        count: products.length,
+        products,
       });
     } else {
       res.status(404).json({
@@ -68,7 +69,7 @@ router.get("/", async (req, res) => {
 router.get("/:productId", async (req, res) => {
   try {
     const productId = req.params.productId;
-    const product = await Product.findById(productId);
+    const product = await Product.findById({ hidden: false, productId });
     if (product) {
       res.status(200).json({
         product,
