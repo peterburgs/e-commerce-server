@@ -1,13 +1,25 @@
+// Import Models
+require("./models/Product");
+require("./models/Category");
+
 // Import libraries
 require("dotenv/config");
 const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
+// Import Routes
+const ProductRoutes = require("./Routes/ProductRoutes");
+const CategoryRoutes = require("./Routes/CategoryRoutes");
 // Define app
 const port = 3001;
 const app = express();
+
+// Prevent CORS errors
+app.use(cors());
+app.options("*", cors());
 
 // Connect to MongoDB
 mongoose
@@ -27,17 +39,12 @@ app.use(bodyParser.json());
 app.use(
   morgan("Method=:method |URL= :url |Status= :status | :response-time ms")
 );
-app.get(`${api}/products`, (req, res) => {
-  const product = {
-    id: 1,
-    name: "pepsi",
-    image: "google.com",
-  };
-  res.status(200).json({
-    message: "Done",
-    product,
-  });
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Define URL
+app.use(`${api}/products`, ProductRoutes);
+app.use(`${api}/categories`, CategoryRoutes);
 
 // Start app with given port
 app.listen(port, async (req, res) => {
