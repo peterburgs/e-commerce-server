@@ -3,7 +3,7 @@ const Product = require("../models/Product");
 
 // Import libraries
 const express = require("express");
-
+const mongoose = require("mongoose");
 const router = express.Router();
 
 // POST: Create a new product
@@ -45,7 +45,12 @@ router.post("/", async (req, res) => {
 //GET: Get all products
 router.get("/", async (req, res) => {
   try {
-    const products = await Product.find({ hidden: false });
+    let filter = { hidden: false };
+    if (req.query.categories) {
+      filter = { ...filter, category: req.query.categories.split(",") };
+    }
+
+    const products = await Product.find(filter).populate("category");
     if (products) {
       res.status(201).json({
         message: "Get all products",
@@ -58,32 +63,131 @@ router.get("/", async (req, res) => {
       });
     }
   } catch (error) {
-    console.log("*** Can not get list Products");
+    console.log("*** Cannot get list Products");
     res.status(500).json({
-      message: "Can not get list of Products",
+      message: "Cannot get list of Products",
     });
   }
 });
 
-// GET method: Get 1 product
-router.get("/:productId", async (req, res) => {
-  try {
-    const productId = req.params.productId;
-    const product = await Product.findById({ hidden: false, productId });
-    if (product) {
-      res.status(200).json({
-        product,
-        message: "Retrieve a product",
+// GET method: Get one product by ID
+router.get("/:productId", async (req, res, next) => {
+  const _id = req.params.productId;
+  if (mongoose.isValidObjectId(_id)) {
+    try {
+      const product = await Product.findById({
+        hidden: false,
+        _id: _id,
+      }).populate("category");
+      if (product) {
+        res.status(200).json({
+          message: "Product found",
+          product,
+        });
+      } else {
+        res.status(404).json({
+          message: "Don't have this product",
+        });
+      }
+    } catch (error) {
+      console.log("*** Cannot get a product: ", error.message);
+      res.status(501).json({
+        message: "Cannot get a product",
       });
-    } else {
-      res.status(400).json({
-        message: "Don't have this product",
+    }
+  } else {
+    next();
+  }
+});
+
+// PUT method: update one product
+router.put("/:id", async (req, res) => {
+  const _id = req.params.id;
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(
+      _id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    // If cannot update
+    if (!updatedProduct) {
+      res.status(500).json({
+        message: "Cannot update product",
+      });
+    }
+    // If update successfully
+    else {
+      res.status(200).json({
+        message: "Updated successfully",
+        product: updatedProduct,
       });
     }
   } catch (error) {
-    console.log("*** Can not get list Products");
     res.status(500).json({
-      message: "Can not get a Product",
+      message: "Cannot update product ",
+    });
+    console.log("Error when update product: ", error.message);
+  }
+});
+
+// DELETE method: hide one product
+router.delete("/:id", async (req, res) => {
+  const _id = req.params.id;
+  if (!mongoose.isValidObjectId(_id)) {
+    return res.status(404).json({
+      message: "Invalid Product ID",
+    });
+  }
+  try {
+    const hiddenProduct = await Product.findOneAndUpdate(
+      { hidden: false, _id },
+      { hidden: true },
+      { new: true }
+    );
+    // If cannot hide product
+    if (!hiddenProduct) {
+      res.status(500).json({
+        message: "Cannot delete product",
+      });
+    } else {
+      res.status(200).json({
+        message: "Product is hidden successfully",
+        hiddenProduct,
+      });
+    }
+  } catch (error) {
+    console.log("Error when delete product: ", error.message);
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+});
+
+// GET method: get featured products
+
+router.get("/featured", async (req, res) => {
+  try {
+    const featuredProducts = await Product.find({
+      hidden: false,
+      isFeatured: true,
+    }).populate("category");
+    // If cannot find any docs
+    if (!featuredProducts) {
+      res.status(404).json({
+        message: "No featured product found",
+      });
+    } else {
+      res.status(200).json({
+        message: "All featured products found",
+        featuredProducts,
+      });
+    }
+  } catch (error) {
+    console.log("Error when get featured products: ", error.message);
+    res.status(500).json({
+      message: error.message,
     });
   }
 });

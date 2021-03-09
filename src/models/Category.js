@@ -29,4 +29,10 @@ const categorySchema = mongoose.Schema(
   { timestamps: true }
 );
 
+categorySchema.virtual("id").get(function () {
+  return this._id.toHexString();
+});
+
+categorySchema.set("toJSON", { virtual: true });
+
 module.exports = mongoose.model("Category", categorySchema);
