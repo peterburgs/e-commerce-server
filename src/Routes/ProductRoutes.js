@@ -1,5 +1,5 @@
 // Import Models
-const Product = require("../models/Product");
+const Product = require("../Models/Product");
 
 // Import libraries
 const express = require("express");
@@ -65,7 +65,7 @@ router.get("/", async (req, res) => {
   } catch (error) {
     console.log("*** Cannot get list Products");
     res.status(500).json({
-      message: "Cannot get list of Products",
+      message: error.message,
     });
   }
 });
