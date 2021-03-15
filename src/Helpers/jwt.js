@@ -1,6 +1,7 @@
 const expressJwt = require("express-jwt");
 
 const isRevoked = async (req, payload, done) => {
+  console.log("*** Payload: ", payload);
   if (!payload.isAdmin) {
     // Reject token if user is not admin
     done(null, true);
@@ -13,7 +14,7 @@ const authJwt = () => {
   const api = process.env.API_URL;
   return expressJwt({
     secret: process.env.SECRET_KEY,
-    algorithms: ["ES512"],
+    algorithms: ["HS256"],
     isRevoked: isRevoked,
   }).unless({
     // Exclude paths
