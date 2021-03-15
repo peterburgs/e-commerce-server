@@ -1,6 +1,7 @@
 // Import Models
-require("./models/Product");
-require("./models/Category");
+require("./Models/Product");
+require("./Models/Category");
+require("./Models/User");
 
 // Import libraries
 require("dotenv/config");
@@ -9,10 +10,16 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const authJwt = require("./Helpers/jwt");
+
+// Import middleware
+const errorHandler = require("./Helpers/errorHandler");
 
 // Import Routes
 const ProductRoutes = require("./Routes/ProductRoutes");
 const CategoryRoutes = require("./Routes/CategoryRoutes");
+const UserRoutes = require("./Routes/UserRoutes");
+
 // Define app
 const port = 3001;
 const app = express();
@@ -41,10 +48,13 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(authJwt());
+app.use(errorHandler);
 
 // Define URL
 app.use(`${api}/products`, ProductRoutes);
 app.use(`${api}/categories`, CategoryRoutes);
+app.use(`${api}/users`, UserRoutes);
 
 // Start app with given port
 app.listen(port, async (req, res) => {
