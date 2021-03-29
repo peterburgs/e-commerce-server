@@ -2,6 +2,8 @@
 require("./Models/Product");
 require("./Models/Category");
 require("./Models/User");
+require("./Models/Order");
+require("./Models/OrderItem");
 
 // Import libraries
 require("dotenv/config");
@@ -19,6 +21,7 @@ const errorHandler = require("./Helpers/errorHandler");
 const ProductRoutes = require("./Routes/ProductRoutes");
 const CategoryRoutes = require("./Routes/CategoryRoutes");
 const UserRoutes = require("./Routes/UserRoutes");
+const OrderRoutes = require("./Routes/OrderRoutes");
 
 // Define app
 const port = 3001;
@@ -55,6 +58,7 @@ app.use(errorHandler);
 app.use(`${api}/products`, ProductRoutes);
 app.use(`${api}/categories`, CategoryRoutes);
 app.use(`${api}/users`, UserRoutes);
+app.use(`${api}/orders`, OrderRoutes);
 
 // Start app with given port
 app.listen(port, async (req, res) => {

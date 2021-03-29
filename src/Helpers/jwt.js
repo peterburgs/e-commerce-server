@@ -1,7 +1,6 @@
 const expressJwt = require("express-jwt");
 
 const isRevoked = async (req, payload, done) => {
-  console.log("*** Payload: ", payload);
   if (!payload.isAdmin) {
     // Reject token if user is not admin
     done(null, true);
