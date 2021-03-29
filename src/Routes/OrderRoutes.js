@@ -29,10 +29,9 @@ router.post("/", async (req, res) => {
   // Calculate total price of the order
   const totalPriceList = await Promise.all(
     orderItemIdsResolved.map(async (orderItemId) => {
-      const orderItem = await OrderItem.findById(orderItemId).populate(
-        "product",
-        "price"
-      );
+      const orderItem = await OrderItem.findById(
+        orderItemId
+      ).populate("product", "price");
       return orderItem.product.price * orderItem.quantity;
     })
   );
@@ -207,5 +206,35 @@ router.get("/get/totalsales", async (req, res) => {
   }
 });
 
+// GET method: get orders of a user by userId
+router.get("/get/userorders/:userid", async (req, res) => {
+  try {
+    const userOrderList = await Order.find({
+      user: req.params.userid
+    })
+      .populate({
+        path: "orderItems",
+        populate: {
+          path: "product",
+          populate: "category",
+        },
+      })
+      .sort({ dateCreated: -1 });
+    if (!userOrderList) {
+      res.status(500).json({
+        message: "Cannot get user orders",
+      });
+    } else {
+      res.status(200).json({
+        message: "Successfully",
+        userOrderList,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+});
 // Export router
 module.exports = router;
