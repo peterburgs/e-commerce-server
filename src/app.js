@@ -52,6 +52,13 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(authJwt());
+
+const path = require("path");
+app.use(
+  "/public/uploads",
+  express.static(path.join(__dirname, "..", "public", "uploads"))
+);
+
 app.use(errorHandler);
 
 // Define URL
