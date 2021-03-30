@@ -1,5 +1,6 @@
 const express = require("express");
 const { mongo } = require("mongoose");
+const multer = require("multer");
 
 // Import model
 const Order = require("../Models/Order");
@@ -29,9 +30,10 @@ router.post("/", async (req, res) => {
   // Calculate total price of the order
   const totalPriceList = await Promise.all(
     orderItemIdsResolved.map(async (orderItemId) => {
-      const orderItem = await OrderItem.findById(
-        orderItemId
-      ).populate("product", "price");
+      const orderItem = await OrderItem.findById(orderItemId).populate(
+        "product",
+        "price"
+      );
       return orderItem.product.price * orderItem.quantity;
     })
   );
@@ -210,7 +212,7 @@ router.get("/get/totalsales", async (req, res) => {
 router.get("/get/userorders/:userid", async (req, res) => {
   try {
     const userOrderList = await Order.find({
-      user: req.params.userid
+      user: req.params.userid,
     })
       .populate({
         path: "orderItems",
