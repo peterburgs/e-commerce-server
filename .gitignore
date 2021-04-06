@@ -372,3 +372,6 @@ Temporary Items
 
 #mongoDB credential
 nodemon.json
+
+.expo
+.expo-shared
