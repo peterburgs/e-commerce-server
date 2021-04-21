@@ -1,5 +1,5 @@
 // Import Models
-const Product = require("../Models/Product");
+const Product = require("../needToChange/Product");
 
 // Import libraries
 const express = require("express");

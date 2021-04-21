@@ -1,11 +1,10 @@
 // Import Models
-require("./Models/Product");
-require("./Models/Category");
-require("./Models/User");
-require("./Models/Order");
-require("./Models/OrderItem");
+require("./needToChange/Product");
+require("./needToChange/Category");
+require("./needToChange/User");
+require("./needToChange/Order");
+require("./needToChange/OrderItem");
 // Just change name of model folder
-// Import libraries
 require("dotenv/config");
 const express = require("express");
 const bodyParser = require("body-parser");

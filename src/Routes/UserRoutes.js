@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 // Import models
-const User = require("../Models/User");
+const User = require("../needToChange/User");
 
 const router = express.Router();
 
