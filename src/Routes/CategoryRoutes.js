@@ -1,5 +1,5 @@
 // Import model
-const Category = require("../needToChange/Category");
+const Category = require("../Models/Category");
 
 // Import libraries
 const express = require("express");

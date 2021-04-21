@@ -3,8 +3,8 @@ const { mongo } = require("mongoose");
 const multer = require("multer");
 
 // Import model
-const Order = require("../needToChange/Order");
-const OrderItem = require("../needToChange/OrderItem");
+const Order = require("../Models/Order");
+const OrderItem = require("../Models/OrderItem");
 
 const router = express.Router();
 
