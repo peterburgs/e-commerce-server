@@ -55,7 +55,7 @@ app.use(authJwt());
 
 const path = require("path");
 app.use(
-  "/public/uploads",
+  "/api/v1/public/uploads",
   express.static(path.join(__dirname, "..", "public", "uploads"))
 );
 

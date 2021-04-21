@@ -16,6 +16,10 @@ const orderSchema = mongoose.Schema({
   city: {
     type: String,
   },
+  country: {
+    type: String,
+    required: true,
+  },
   phone: {
     type: String,
     required: true,
@@ -34,6 +38,7 @@ const orderSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+
   dateCreated: {
     type: Date,
     default: Date.now,
