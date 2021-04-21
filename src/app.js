@@ -4,7 +4,7 @@ require("./Models/Category");
 require("./Models/User");
 require("./Models/Order");
 require("./Models/OrderItem");
-
+// Just change name of model folder
 // Import libraries
 require("dotenv/config");
 const express = require("express");
