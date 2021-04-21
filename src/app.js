@@ -68,14 +68,14 @@ app.use(`${api}/users`, UserRoutes);
 app.use(`${api}/orders`, OrderRoutes);
 
 // Start app with given port
-// app.listen(port, async (req, res) => {
-//   console.log("*** Server is running in port " + port);
-// });
+app.listen(process.env.PORT || port, async (req, res) => {
+  console.log("*** Server is running in port " + port);
+});
 
 // Production mode
-const server = app.listen(process.env.PORT || 3001, function () {
-  const port = server.address().port;
-  console.log("====================================");
-  console.log("Server is running on port ", port);
-  console.log("====================================");
-});
+// const server = app.listen(process.env.PORT || 3001, function () {
+//   const port = server.address().port;
+//   console.log("====================================");
+//   console.log("Server is running on port ", port);
+//   console.log("====================================");
+// });
