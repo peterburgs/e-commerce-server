@@ -43,12 +43,12 @@ router.post("/", uploadOptions.single("image"), async (req, res) => {
   }
 
   const filename = req.file.filename;
-  const basePath = `${req.protocol}://${req.get("host")}/public/uploads/`;
+  const basePath = `/public/uploads/`;
   const product = new Product({
     name: req.body.name,
     description: req.body.description,
     richDescription: req.body.richDescription,
-    image: req.body.image,
+    image: `${basePath}${filename}`,
     images: `${basePath}${filename}`,
     brand: req.body.brand,
     price: req.body.price,
@@ -89,7 +89,7 @@ router.get("/", async (req, res) => {
 
     const products = await Product.find(filter).populate("category");
     if (products) {
-      res.status(201).json({
+      res.status(200).json({
         message: "Get all products",
         count: products.length,
         products,
