@@ -149,13 +149,14 @@ router.delete("/:id", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
+    console.log(req.body);
     // Validate user email existed or not
     if (user) {
       // validate raw password with hashed password
       if (bcrypt.compareSync(req.body.password, user.hashedPassword)) {
         const token = jwt.sign(
           {
-            userId: user.id,
+            _id: user.id,
             isAdmin: user.isAdmin,
           },
           process.env.SECRET_KEY,
@@ -188,7 +189,7 @@ router.post("/login", async (req, res) => {
 router.post("/signup", async (req, res) => {
   const rawPassword = req.body.rawPassword;
   const user = new User({
-    firstName: req.body.firstName,
+    firstName: req.body.name,
     lastName: req.body.lastName,
     email: req.body.email,
     hashedPassword: bcrypt.hashSync(rawPassword, 10),

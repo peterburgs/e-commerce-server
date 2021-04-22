@@ -66,6 +66,7 @@ router.post("/", async (req, res) => {
     });
   } catch (error) {
     console.log("Error when save order");
+    console.log(error.message);
     res.status(500).json({
       message: error.message,
     });

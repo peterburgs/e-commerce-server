@@ -18,7 +18,6 @@ const orderSchema = mongoose.Schema({
   },
   country: {
     type: String,
-    required: true,
   },
   phone: {
     type: String,
